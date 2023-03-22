@@ -11,6 +11,7 @@ import NewProduct from "./Pages/NewProduct";
 import getCategories from "./utils/getCategories";
 import getProducts from "./utils/getProducts";
 import Logout from "./Pages/Logout";
+import ModifyProduct from "./Pages/ModifyProduct";
 
 function App({ setUser, setCategories, setProducts }) {
   useEffect(() => {
@@ -53,6 +54,15 @@ function App({ setUser, setCategories, setProducts }) {
           <Route exact path="/logout">
             <Logout />
           </Route>
+
+          <Route
+            exact
+            path="/product/update/:product_id"
+            render={(props) => {
+              const product_id = props.match.params.product_id;
+              return <ModifyProduct product_id={product_id && product_id} />;
+            }}
+          />
           <Route
             exact
             path="/auth/:type"

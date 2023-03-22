@@ -14,8 +14,43 @@ import ProductCard from "../components/ProductCard";
 import Tab from "../components/Tab";
 import AddIcon from "@mui/icons-material/Add";
 import PopUp from "../components/PopUp";
-function Home({ user, products, filteredProducts }) {
+import useAdmin from "../hooks/useAdmin";
+import { setProducts } from "../redux/actions";
+import getProducts from "../utils/getProducts";
+function Home({ user, products, filteredProducts, setProducts }) {
   const [filter, setFilter] = useState("default");
+  const admin = useAdmin();
+
+  async function defaultProducts() {
+    const productsList = await getProducts();
+
+    setProducts(productsList);
+  }
+
+  async function newProducts() {
+    const productsList = await getProducts();
+
+    setProducts(productsList.reverse());
+  }
+
+  //handle sorting
+
+  const handleSort = (e) => {
+    setFilter(e.target.value);
+    const tempProducts = [...products];
+    if (e.target.value === "lh") {
+      tempProducts.sort((a, b) => (a.price < b.price ? 1 : -1));
+      setProducts(tempProducts);
+    } else if (e.target.value === "hl") {
+      tempProducts.sort((a, b) => (a.price > b.price ? 1 : -1));
+      setProducts(tempProducts);
+    } else if (e.target.value === "new") {
+      console.log("Handling Newest Products");
+      newProducts();
+    } else {
+      defaultProducts();
+    }
+  };
 
   return (
     <div>
@@ -34,11 +69,11 @@ function Home({ user, products, filteredProducts }) {
                 id="demo-simple-select"
                 value={filter}
                 label="Filter"
-                onChange={(e) => setFilter(e.target.value)}
+                onChange={handleSort}
               >
                 <MenuItem value={"default"}>Default</MenuItem>
-                <MenuItem value={"high-low"}>Price: High to Low</MenuItem>
-                <MenuItem value={"low-high"}>Price:Low to High</MenuItem>
+                <MenuItem value={"hl"}>Price: High to Low</MenuItem>
+                <MenuItem value={"lh"}>Price:Low to High</MenuItem>
                 <MenuItem value={"new"}>Newest</MenuItem>
               </Select>
             </FormControl>
@@ -64,17 +99,19 @@ function Home({ user, products, filteredProducts }) {
           </Grid>
         </div>
       </div>
-      <div
-        style={{
-          position: "fixed",
-        }}
-        className="left-[50%] translate-x-[-50%] bottom-10 block md:hidden"
-      >
-        <Fab variant="extended" color="primary">
-          <AddIcon sx={{ mr: 1 }} />
-          Add Product
-        </Fab>
-      </div>
+      {admin && (
+        <div
+          style={{
+            position: "fixed",
+          }}
+          className="left-[50%] translate-x-[-50%] bottom-10 block md:hidden"
+        >
+          <Fab variant="extended" color="primary">
+            <AddIcon sx={{ mr: 1 }} />
+            Add Product
+          </Fab>
+        </div>
+      )}
     </div>
   );
 }
@@ -85,4 +122,8 @@ const mapStateToProps = (state) => ({
   filteredProducts: state.appReducer.filteredProducts,
 });
 
-export default connect(mapStateToProps, null)(Home);
+const mapDispatchToProps = (dispatch) => ({
+  setProducts: (products) => dispatch(setProducts(products)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

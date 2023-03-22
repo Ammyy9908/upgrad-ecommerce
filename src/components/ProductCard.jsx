@@ -8,9 +8,13 @@ import { DeleteForever, Edit } from "@material-ui/icons";
 import useAdmin from "../hooks/useAdmin";
 import PopUp from "./PopUp";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 export default function ProductCard({ product }) {
   const admin = useAdmin();
+  const auth = useAuth();
+  const history = useHistory();
   const [open, setOpen] = useState(false);
   return (
     <div>
@@ -38,11 +42,25 @@ export default function ProductCard({ product }) {
           </Typography>
         </CardContent>
         <div className="flex items-center justify-between w-full px-2 py-3">
-          <Button variant="contained">Buy</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (!auth) {
+                history.push("/auth/login/");
+              }
+            }}
+          >
+            Buy
+          </Button>
 
           {admin && (
             <div>
-              <IconButton aria-label="Remove Product">
+              <IconButton
+                aria-label="Remove Product"
+                onClick={() => {
+                  history.push("/product/update/" + product.id);
+                }}
+              >
                 <Edit />
               </IconButton>
               <IconButton

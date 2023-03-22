@@ -6,7 +6,7 @@ function Logout() {
     setTimeout(() => {
       localStorage.removeItem("jwt_token");
       window.location.href = "/auth/login";
-    }, 5000);
+    }, 2000);
   }, []);
   return (
     <div className="w-full h-screen flex items-center justify-center">
