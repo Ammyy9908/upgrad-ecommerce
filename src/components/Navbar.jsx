@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { ShoppingCart } from "@material-ui/icons";
+import useAdmin from "../hooks/useAdmin";
+import useAuth from "../hooks/useAuth";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -52,6 +54,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar({ user }) {
+  const admin = useAdmin();
+  const auth = useAuth();
+
+  console.log("Admin Status", admin);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -89,16 +95,26 @@ export default function Navbar({ user }) {
               />
             </Search>
 
-            {!user ? (
+            {!auth && (
               <div className="flex items-center gap-3">
                 <a href="/auth/login">Login</a>
                 <a href="/auth/signup">Sign Up</a>
               </div>
-            ) : (
+            )}
+
+            {admin && (
               <div className="flex items-center gap-3">
                 <a href="/product/new" className="hidden md:block">
                   Add Product
                 </a>
+                <a href="/logout" className="px-3 py-1 bg-red-500 rounded-md">
+                  Logout
+                </a>
+              </div>
+            )}
+
+            {!admin && auth && (
+              <div className="flex items-center gap-3">
                 <a href="/logout" className="px-3 py-1 bg-red-500 rounded-md">
                   Logout
                 </a>

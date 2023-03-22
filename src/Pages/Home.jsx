@@ -13,8 +13,10 @@ import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import Tab from "../components/Tab";
 import AddIcon from "@mui/icons-material/Add";
+import PopUp from "../components/PopUp";
 function Home({ user, products, filteredProducts }) {
   const [filter, setFilter] = useState("default");
+
   return (
     <div>
       <Navbar user={user} />
@@ -47,14 +49,14 @@ function Home({ user, products, filteredProducts }) {
             {filteredProducts.length > 0
               ? filteredProducts.map((product, index) => {
                   return (
-                    <Grid item xs={12} md={6} lg={3}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <ProductCard product={product} />
                     </Grid>
                   );
                 })
               : products.map((product, index) => {
                   return (
-                    <Grid item xs={12} md={6} lg={3}>
+                    <Grid item xs={12} md={6} lg={4}>
                       <ProductCard product={product} />
                     </Grid>
                   );

@@ -42,7 +42,7 @@ function Auth({ type }) {
     localStorage.setItem("jwt_token", auth_feedback.token);
     setTimeout(() => {
       window.location.href = "/";
-    }, 5000);
+    }, 2000);
   };
 
   //handle signup

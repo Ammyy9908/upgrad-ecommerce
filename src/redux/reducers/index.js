@@ -19,6 +19,24 @@ export default function AppReducer(state = intialState, action) {
         products: action.products,
       };
     }
+    case "REMOVE_FROM_PRODUCTS":
+      const index = state.products.findIndex(
+        (product) => product.id === action.id
+      );
+      let newProducts = [...state.products];
+
+      if (index >= 0) {
+        newProducts.splice(index, 1);
+      } else {
+        console.warn(
+          `Cant remove product (id: ${action.id}) as its not in basket!`
+        );
+      }
+
+      return {
+        ...state,
+        products: newProducts,
+      };
     case "SET_FILTERED_PRODUCTS": {
       return {
         ...state,

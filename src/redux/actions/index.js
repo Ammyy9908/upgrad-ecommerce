@@ -16,3 +16,10 @@ export const setFilteredProducts = (filtered_products) => ({
   type: "SET_FILTERED_PRODUCTS",
   filtered_products,
 });
+
+export const removeFromProducts = (id) => ({
+  type: "REMOVE_FROM_PRODUCTS",
+  id,
+});
+
+//REMOVE_FROM_PRODUCTS
