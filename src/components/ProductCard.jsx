@@ -47,6 +47,8 @@ export default function ProductCard({ product }) {
             onClick={() => {
               if (!auth) {
                 history.push("/auth/login/");
+              } else {
+                history.push("/product/" + product.id);
               }
             }}
           >
