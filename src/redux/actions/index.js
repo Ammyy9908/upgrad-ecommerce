@@ -22,4 +22,9 @@ export const removeFromProducts = (id) => ({
   id,
 });
 
+export const setAddresses = (address) => ({
+  type: "SET_ADDRESS",
+  address,
+});
+
 //REMOVE_FROM_PRODUCTS

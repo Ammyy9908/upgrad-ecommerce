@@ -3,6 +3,7 @@ const intialState = {
   categories: [],
   products: [],
   filteredProducts: [],
+  addresses: [],
 };
 
 export default function AppReducer(state = intialState, action) {
@@ -17,6 +18,12 @@ export default function AppReducer(state = intialState, action) {
       return {
         ...state,
         products: action.products,
+      };
+    }
+    case "SET_ADDRESS": {
+      return {
+        ...state,
+        addresses: action.address,
       };
     }
     case "REMOVE_FROM_PRODUCTS":

@@ -39,10 +39,10 @@ function Home({ user, products, filteredProducts, setProducts }) {
     setFilter(e.target.value);
     const tempProducts = [...products];
     if (e.target.value === "lh") {
-      tempProducts.sort((a, b) => (a.price < b.price ? 1 : -1));
+      tempProducts.sort((a, b) => (a.price > b.price ? 1 : -1));
       setProducts(tempProducts);
     } else if (e.target.value === "hl") {
-      tempProducts.sort((a, b) => (a.price > b.price ? 1 : -1));
+      tempProducts.sort((a, b) => (a.price < b.price ? 1 : -1));
       setProducts(tempProducts);
     } else if (e.target.value === "new") {
       console.log("Handling Newest Products");

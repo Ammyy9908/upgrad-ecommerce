@@ -1,90 +1,91 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { Button } from "@mui/material";
-import Card from "@mui/material/Card";
-import { Grid } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import CardContent from "@mui/material/CardContent";
-import { useNavigate } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import getProduct from "../utils/getProduct";
+function Product({ product_id }) {
+  const [product, setProduct] = useState(false);
+  const [count, setCount] = useState(0);
+  const history = useHistory();
+  useEffect(() => {
+    async function fetchProduct() {
+      const pr = await getProduct(product_id);
+      console.log(pr);
+      setProduct(pr);
+    }
+    fetchProduct();
+  }, []);
 
-//import RemoveItem from "../../../utils/deleteProduct"
-
-const Product = (props) => {
-  const navigate = useNavigate();
-  const deleteHandler = () => {
-    props.setProductId(props.id);
-    return props.setOpen(true);
-  };
-
+  console.log(product);
   return (
-    <Grid item xs={12} sm={6} md={3}>
-      <Card
-        variant="outlined"
-        key={props.id}
-        className={`${props.className}`}
-        sx={{ maxWidth: 345, minWidth: "100%" }}
-        style={{
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-        }}
-      >
-        <div className="h-[430px] lg:h-[355px] w-full overflow-hidden">
-          <img
-            src={props.product.imageUrl}
-            alt="Paella dish"
-            className="h-full  w-full object-cover transition-all"
-          />
+    <div>
+      <Navbar />
+      <div className="px-3 md:px-6 lg:px-32 my-12"></div>
+      <div className="page_body px-3 md:px-6 lg:px-32 py-12 md:py-16 w-[95%] mx-auto grid grid-cols-2 lg:grid-cols-3 lg:gap-64">
+        <div className="product-image w-[230px] h-[230px] md:w-[375px] md:h-[375px] bg-gray-300 col-span-1">
+          {product && (
+            <img
+              src={product.imageUrl}
+              alt={`${product?.name} Cover`}
+              className="w-full h-full object-cover"
+            />
+          )}
         </div>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold">{props.product.name}</h2>
-            <h2>₹ {props.product.price}</h2>
+        <div className="product-meta col-span-2">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl">
+              {product ? product.name : "Loading..."}
+            </h2>
+            <div className="px-2 py-2 bg-blue-800 text-white rounded-full">
+              <p className="text-sm">
+                Avialable Quantity:{" "}
+                <span className="font-semibold">{product?.availableItems}</span>
+              </p>
+            </div>
           </div>
-          <Typography variant="body2" color="text.secondary">
-            {props.product.description.length > 30
-              ? props.product.description.slice(0, 30) + "..."
-              : props.product.description}
-          </Typography>
-        </CardContent>
-        <div className="flex items-center justify-between w-full px-2 py-3">
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate("/productdetail/" + props.id, {
-                state: { id: props.id, role: props.role },
-              });
-            }}
-          >
-            Buy
-          </Button>
+          <div className="mb-3 flex items-center gap-3">
+            <span>Category</span>
+            <span>
+              <strong>{product?.category}</strong>
+            </span>
+          </div>
+          <p className="text-black/50 md:w-[375px]">
+            {product && product.description}
+          </p>
           <div>
-            {props.role === "admin" && (
-              <Button
-                key={props.id}
-                style={{ color: "gray" }}
-                onClick={() => {
-                  navigate("/modifyproduct/" + props.id, {
-                    state: { id: props.id },
-                  });
-                }}
-              >
-                {" "}
-                <EditIcon />
-              </Button>
-            )}
-            {props.role === "admin" && (
-              <Button
-                style={{ color: "gray" }}
-                onClick={deleteHandler}
-                data-id={props.id}
-              >
-                <DeleteIcon />
-              </Button>
-            )}
+            <p className="text-red-700 text-2xl">₹ {product?.price}</p>
+          </div>
+          <div className="flex flex-col items-start gap-2 mt-3">
+            <TextField
+              id="outlined-basic"
+              label="Enter Quantity *"
+              variant="outlined"
+              fullWidth
+              type="number"
+              style={{ width: 275 }}
+              value={count}
+              onChange={(e) => {
+                if (e.target.value <= product.availableItems) {
+                  setCount(e.target.value);
+                }
+              }}
+            />
+            <Button
+              variant="contained"
+              color={"primary"}
+              disabled={!parseInt(count) && true}
+              onClick={() => {
+                history.push("/place/order");
+              }}
+            >
+              Place Order
+            </Button>
           </div>
         </div>
-      </Card>
-    </Grid>
+      </div>
+    </div>
   );
-};
+}
+
 export default Product;
