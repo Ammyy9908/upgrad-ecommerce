@@ -5,6 +5,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -13,14 +14,13 @@ import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import Tab from "../components/Tab";
 import AddIcon from "@mui/icons-material/Add";
-import PopUp from "../components/PopUp";
 import useAdmin from "../hooks/useAdmin";
 import { setProducts } from "../redux/actions";
 import getProducts from "../utils/getProducts";
 function Home({ user, products, filteredProducts, setProducts }) {
   const [filter, setFilter] = useState("default");
   const admin = useAdmin();
-
+  const [adminError, setAdminError] = useState(false);
   async function defaultProducts() {
     const productsList = await getProducts();
 
@@ -85,14 +85,20 @@ function Home({ user, products, filteredProducts, setProducts }) {
               ? filteredProducts.map((product, index) => {
                   return (
                     <Grid item xs={12} md={6} lg={4}>
-                      <ProductCard product={product} />
+                      <ProductCard
+                        product={product}
+                        setAdminError={setAdminError}
+                      />
                     </Grid>
                   );
                 })
               : products.map((product, index) => {
                   return (
                     <Grid item xs={12} md={6} lg={4}>
-                      <ProductCard product={product} />
+                      <ProductCard
+                        product={product}
+                        setAdminError={setAdminError}
+                      />
                     </Grid>
                   );
                 })}
@@ -112,6 +118,14 @@ function Home({ user, products, filteredProducts, setProducts }) {
           </Fab>
         </div>
       )}
+      <Snackbar
+        open={adminError}
+        autoHideDuration={6000}
+        onClose={() => {
+          setAdminError(true);
+        }}
+        message="Admin can't buy an product"
+      />
     </div>
   );
 }

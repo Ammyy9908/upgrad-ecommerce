@@ -20,6 +20,7 @@ import ModifyProduct from "./Pages/ModifyProduct";
 import Product from "./Pages/Product";
 import PlaceOrder from "./Pages/PlaceOrder";
 import getAddress from "./utils/getAddresses";
+import axios from "axios";
 
 function App({ setUser, setCategories, setProducts, setAddresses }) {
   useEffect(() => {
@@ -64,6 +65,7 @@ function App({ setUser, setCategories, setProducts, setAddresses }) {
     fetchProducts();
     fetAddress();
   }, []);
+
   return (
     <Router>
       <div>

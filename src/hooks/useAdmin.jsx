@@ -7,7 +7,7 @@ function useAdmin() {
   console.log("User Inside Hook", user);
 
   useEffect(() => {
-    if (localStorage.getItem("jwt_token") !== "" && !user) {
+    if (user?.roles[0].name !== "ADMIN") {
       console.log("Normal user");
       setAdmin(false);
     } else {

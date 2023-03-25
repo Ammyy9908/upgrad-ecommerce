@@ -22,9 +22,29 @@ export const removeFromProducts = (id) => ({
   id,
 });
 
+export const setFilter = (filter) => ({
+  type: "SET_FILTER",
+  filter,
+});
+
 export const setAddresses = (address) => ({
   type: "SET_ADDRESS",
   address,
+});
+
+export const setCart = (cart) => ({
+  type: "SET_CART",
+  cart,
+});
+
+export const addAddress = (address) => ({
+  type: "ADD_ADDRESS",
+  address,
+});
+
+export const setOrder = (order) => ({
+  type: "SET_ORDER",
+  order,
 });
 
 //REMOVE_FROM_PRODUCTS

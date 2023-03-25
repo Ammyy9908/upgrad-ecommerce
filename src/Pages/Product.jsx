@@ -1,10 +1,12 @@
 import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { setCart } from "../redux/actions";
 import getProduct from "../utils/getProduct";
-function Product({ product_id }) {
+function Product({ product_id, setCart }) {
   const [product, setProduct] = useState(false);
   const [count, setCount] = useState(0);
   const history = useHistory();
@@ -76,6 +78,15 @@ function Product({ product_id }) {
               color={"primary"}
               disabled={!parseInt(count) && true}
               onClick={() => {
+                setCart({
+                  id: product_id,
+                  name: product.name,
+                  image: product.imageUrl,
+                  count: count,
+                  category: product.category,
+                  description: product.description,
+                  price: product.price,
+                });
                 history.push("/place/order");
               }}
             >
@@ -88,4 +99,7 @@ function Product({ product_id }) {
   );
 }
 
-export default Product;
+const mapDispatchToProps = (dispatch) => ({
+  setCart: (cart) => dispatch(setCart(cart)),
+});
+export default connect(null, mapDispatchToProps)(Product);

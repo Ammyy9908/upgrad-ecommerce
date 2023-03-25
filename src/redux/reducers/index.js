@@ -4,6 +4,9 @@ const intialState = {
   products: [],
   filteredProducts: [],
   addresses: [],
+  filter: false,
+  cart: null,
+  order: null,
 };
 
 export default function AppReducer(state = intialState, action) {
@@ -14,16 +17,40 @@ export default function AppReducer(state = intialState, action) {
         user: action.user,
       };
     }
+    case "SET_ORDER": {
+      return {
+        ...state,
+        order: action.order,
+      };
+    }
+    case "SET_CART": {
+      return {
+        ...state,
+        cart: action.cart,
+      };
+    }
     case "SET_PRODUCTS": {
       return {
         ...state,
         products: action.products,
       };
     }
+    case "SET_FILTER": {
+      return {
+        ...state,
+        filter: action.filter,
+      };
+    }
     case "SET_ADDRESS": {
       return {
         ...state,
         addresses: action.address,
+      };
+    }
+    case "ADD_ADDRESS": {
+      return {
+        ...state,
+        addresses: [...state.addresses, action.address],
       };
     }
     case "REMOVE_FROM_PRODUCTS":
@@ -53,7 +80,7 @@ export default function AppReducer(state = intialState, action) {
     case "SET_CATEGORIES": {
       return {
         ...state,
-        categories: [...state.categories, ...action.categories],
+        categories: action.categories,
       };
     }
 

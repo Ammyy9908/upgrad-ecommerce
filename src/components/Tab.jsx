@@ -1,22 +1,25 @@
 import * as React from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { connect } from "react-redux";
-import { setFilteredProducts } from "../redux/actions";
+import { connect, useSelector } from "react-redux";
+import { setFilter, setFilteredProducts } from "../redux/actions";
 
-function Tab({ categories, products, setFilteredProducts }) {
+function Tab({ categories, products, setFilteredProducts, setFilter }) {
   const [alignment, setAlignment] = React.useState("*");
-  console.log("CATEGORIES", categories);
+  const filter = useSelector((state) => state.appReducer.filter);
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
-
+    if (filter) {
+      setFilter(false);
+    } else {
+      setFilter(true);
+    }
     //filter the products here based on category selected
     const filteredProducts =
       newAlignment !== "*"
         ? products.filter((pr) => pr.category === newAlignment)
         : products;
-    console.log("FILTERS", filteredProducts);
     setFilteredProducts(filteredProducts);
   };
 
@@ -46,5 +49,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setFilteredProducts: (filtered_products) =>
     dispatch(setFilteredProducts(filtered_products)),
+  setFilter: (filter) => dispatch(setFilter(filter)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Tab);

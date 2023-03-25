@@ -11,8 +11,9 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, setAdminError }) {
   const admin = useAdmin();
+  console.log("Admin in Product Card", admin);
   const auth = useAuth();
   const history = useHistory();
   const [open, setOpen] = useState(false);
@@ -47,6 +48,12 @@ export default function ProductCard({ product }) {
             onClick={() => {
               if (!auth) {
                 history.push("/auth/login/");
+              } else if (admin) {
+                setAdminError(true);
+                setTimeout(() => {
+                  setAdminError(false);
+                }, 2000);
+                return;
               } else {
                 history.push("/product/" + product.id);
               }

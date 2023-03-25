@@ -3,10 +3,13 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { setCategories, setProducts } from "../redux/actions";
 import addProduct from "../utils/addProduct";
+import getCategories from "../utils/getCategories";
+import getProducts from "../utils/getProducts";
 import modifyProduct from "../utils/modifyProduct";
 
-function ModifyProduct({ user }) {
+function ModifyProduct({ user, setProducts, setCategories }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [manufacture, setManufacture] = useState("");
@@ -22,6 +25,18 @@ function ModifyProduct({ user }) {
     horizontal: "center",
   });
   const { vertical, horizontal, open } = state;
+
+  async function fetchProducts() {
+    const productsList = await getProducts();
+    console.log(productsList);
+    setProducts(productsList);
+  }
+
+  async function fetchCategories() {
+    const categories = await getCategories();
+    console.log(categories);
+    setCategories(categories);
+  }
 
   // handleModify
 
@@ -44,6 +59,8 @@ function ModifyProduct({ user }) {
 
     if (added === 201) {
       setState({ open: true, ...NewState });
+      fetchProducts();
+      fetchCategories();
       setTimeout(() => {
         history.push("/");
       }, 2000);
@@ -203,4 +220,9 @@ const mapStateToProps = (state) => ({
   filteredProducts: state.appReducer.filteredProducts,
 });
 
-export default connect(mapStateToProps, null)(ModifyProduct);
+const mapDispatchToProps = (dispatch) => ({
+  setProducts: (products) => dispatch(setProducts(products)),
+  setCategories: (categories) => dispatch(setCategories(categories)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModifyProduct);
