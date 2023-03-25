@@ -6,7 +6,6 @@ import {
   MenuItem,
   Select,
   Snackbar,
-  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { connect } from "react-redux";
@@ -17,9 +16,11 @@ import AddIcon from "@mui/icons-material/Add";
 import useAdmin from "../hooks/useAdmin";
 import { setProducts } from "../redux/actions";
 import getProducts from "../utils/getProducts";
+import { useHistory } from "react-router-dom";
 function Home({ user, products, filteredProducts, setProducts }) {
   const [filter, setFilter] = useState("default");
   const admin = useAdmin();
+  const history = useHistory();
   const [adminError, setAdminError] = useState(false);
   async function defaultProducts() {
     const productsList = await getProducts();
@@ -112,7 +113,13 @@ function Home({ user, products, filteredProducts, setProducts }) {
           }}
           className="left-[50%] translate-x-[-50%] bottom-10 block md:hidden"
         >
-          <Fab variant="extended" color="primary">
+          <Fab
+            variant="extended"
+            color="primary"
+            onClick={() => {
+              history.push("/product/new");
+            }}
+          >
             <AddIcon sx={{ mr: 1 }} />
             Add Product
           </Fab>

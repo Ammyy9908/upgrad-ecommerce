@@ -1,11 +1,15 @@
 import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { setCategories, setProducts } from "../redux/actions";
+import getCategories from "../utils/getCategories";
 import getProduct from "../utils/getProduct";
+import getProducts from "../utils/getProducts";
 import modifyProduct from "../utils/modifyProduct";
 
-function ModifyProduct({ product_id, user }) {
+function ModifyProduct({ product_id, user, setProducts, setCategories }) {
   console.log("Product Id", product_id);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -15,7 +19,7 @@ function ModifyProduct({ product_id, user }) {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [change, setChange] = useState(false);
-
+  const history = useHistory();
   const [state, setState] = React.useState({
     open: false,
     vertical: "top",
@@ -39,6 +43,18 @@ function ModifyProduct({ product_id, user }) {
     fetchProduct();
   }, [product_id]);
 
+  async function fetchProducts() {
+    const productsList = await getProducts();
+    console.log(productsList);
+    setProducts(productsList);
+  }
+
+  async function fetchCategories() {
+    const categories = await getCategories();
+    console.log(categories);
+    setCategories(categories);
+  }
+
   // handleModify
 
   const handleModify = async () => {
@@ -52,7 +68,6 @@ function ModifyProduct({ product_id, user }) {
       availableItems: itemCount,
     });
 
-    console.log(modified);
     const NewState = {
       vertical: "top",
       horizontal: "right",
@@ -60,6 +75,11 @@ function ModifyProduct({ product_id, user }) {
 
     if (modified === 200) {
       setState({ open: true, ...NewState });
+      fetchProducts();
+      fetchCategories();
+      setTimeout(() => {
+        history.replace("/");
+      }, 2000);
     }
   };
 
@@ -216,4 +236,9 @@ const mapStateToProps = (state) => ({
   filteredProducts: state.appReducer.filteredProducts,
 });
 
-export default connect(mapStateToProps, null)(ModifyProduct);
+const mapDispatchToProps = (dispatch) => ({
+  setProducts: (products) => dispatch(setProducts(products)),
+  setCategories: (categories) => dispatch(setCategories(categories)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModifyProduct);
