@@ -13,7 +13,7 @@ async function sendAddress(address) {
         street: address.city,
         state: address.state,
         zipcode: address.zip,
-        user: "6419fc593956e1361a7dd85b",
+        user: address.uid,
       },
       {
         headers: {

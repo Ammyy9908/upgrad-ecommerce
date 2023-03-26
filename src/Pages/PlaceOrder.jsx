@@ -40,11 +40,18 @@ function PlaceOrder({ addAddress, setOrder }) {
       id: "1",
       quantity: parseInt(order.quantity),
       user: order?.user,
-      product: order?.product.id,
-      address: order?.address.id,
+      product: order?.product?.id,
+      address: order?.address?.id,
     });
+    let added = false;
 
-    if (orderPlaced !== 500 || orderPlaced !== 401) {
+    console.log("ORDER PLACED", orderPlaced);
+
+    if (orderPlaced === 500 || orderPlaced === 401) {
+      toast.error("error in placing order");
+
+      return;
+    } else {
       toast.success("Order Placed Successfully", {
         style: {
           backgroundColor: "green",
@@ -54,15 +61,15 @@ function PlaceOrder({ addAddress, setOrder }) {
           color: "white",
         },
       });
+      added = true;
       setTimeout(() => {
         history.replace("/");
       }, 2000);
-    } else {
-      toast.error("error in placing order");
     }
+    return added;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (activeStep === 1 && !add) {
       toast.error("Please choose address", {
         style: {
@@ -78,14 +85,17 @@ function PlaceOrder({ addAddress, setOrder }) {
       setOrder({
         id: Math.random().toString(36),
         quantity: cart?.count,
-        user: user.id,
+        user: user ? user.id : "1234",
         product: cart,
         address: add,
       });
     }
 
     if (activeStep === 2) {
-      handlePlaceOrder();
+      const added = await handlePlaceOrder();
+      if (!added) {
+        return;
+      }
     }
 
     // place the order
@@ -105,11 +115,17 @@ function PlaceOrder({ addAddress, setOrder }) {
   };
 
   const handleAddrssError = () => {
-    toast.error("Error in saving address");
+    toast.error(
+      user ? "Error in saving address" : "Only admin can add address"
+    );
   };
 
   const handleAddressSuccess = () => {
     toast.success("Successfully added address");
+    clearForm();
+  };
+
+  const clearForm = () => {
     setName("");
     setCity("");
     setLandmark("");
@@ -128,12 +144,14 @@ function PlaceOrder({ addAddress, setOrder }) {
       state,
       name,
       zip,
-      uid: Math.random().toString(6),
+      uid: user ? user?.id : "1234",
     });
 
     console.log("SENTED", sented);
     if (sented === 400 || sented === 500 || sented === 401) {
       handleAddrssError();
+      clearForm();
+      return;
     } else {
       handleAddressSuccess();
       addAddress({
