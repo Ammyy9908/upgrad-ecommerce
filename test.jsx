@@ -37,7 +37,6 @@ export default function PlaceOrder(props) {
   const [address, setAddress] = useState([]);
 
   const token = window.sessionStorage.getItem("access-token");
-  console.log(id);
 
   //debugger
   useEffect(() => {
@@ -52,8 +51,6 @@ export default function PlaceOrder(props) {
       .then((rawResponse) => rawResponse.json())
       .then((data) => {
         setProduct(data);
-
-        console.log(product);
       });
   }, []);
 
@@ -68,9 +65,8 @@ export default function PlaceOrder(props) {
         },
       });
       if (rawres.ok) {
-        console.log(rawres);
         const res = await rawres.json();
-        console.log(res);
+
         setAddress(res);
         //console.log(address);
         //navigate("/admin");
@@ -162,7 +158,6 @@ export default function PlaceOrder(props) {
         const res = await rawRespose.json();
         finaladdressis = { ...res };
         setFinalAddress(res);
-        console.log(finalAddress);
       }
     } catch (e) {
       alert(`Error: ${e.message}`);

@@ -59,7 +59,6 @@ function Navbar({ user, setFilteredProducts }) {
   const admin = useAdmin();
   const auth = useAuth();
   const products = useSelector((state) => state.appReducer.products);
-  console.log("Admin Status", admin);
 
   const handleSearch = (e) => {
     const tempProduct = [...products];
@@ -68,7 +67,6 @@ function Navbar({ user, setFilteredProducts }) {
       p.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
 
-    console.log("Filtered Products", filteredProducts);
     setFilteredProducts(filteredProducts);
   };
   return (

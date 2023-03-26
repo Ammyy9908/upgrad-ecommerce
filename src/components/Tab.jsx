@@ -34,8 +34,11 @@ function Tab({ categories, products, setFilteredProducts, setFilter }) {
       <ToggleButton value="*">All</ToggleButton>
 
       {categories.map((category, index) => {
-        console.log("CAT", category);
-        return <ToggleButton value={category}>{category}</ToggleButton>;
+        return (
+          <ToggleButton key={index} value={category}>
+            {category}
+          </ToggleButton>
+        );
       })}
     </ToggleButtonGroup>
   );

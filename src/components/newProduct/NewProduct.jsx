@@ -2,12 +2,19 @@ import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { setCategories, setProducts } from "../redux/actions";
-import addProduct from "../utils/addProduct";
-import getCategories from "../utils/getCategories";
-import getProducts from "../utils/getProducts";
-import modifyProduct from "../utils/modifyProduct";
+import Navbar from "../Navbar";
+import { setCategories, setProducts } from "../../redux/actions";
+import addProduct from "../../utils/addProduct";
+import getCategories from "../../utils/getCategories";
+import getProducts from "../../utils/getProducts";
+import CreatableSelect from "react-select/creatable";
+
+const options = [
+  { value: "FootWear", label: "Foot Wear" },
+  { value: "Apparel", label: "Apparel" },
+  { value: "PersonalCare", label: "Personal Care" },
+  { value: "Electronics", label: "Electronics" },
+];
 
 function ModifyProduct({ user, setProducts, setCategories }) {
   const [name, setName] = useState("");
@@ -28,13 +35,11 @@ function ModifyProduct({ user, setProducts, setCategories }) {
 
   async function fetchProducts() {
     const productsList = await getProducts();
-    console.log(productsList);
     setProducts(productsList);
   }
 
   async function fetchCategories() {
     const categories = await getCategories();
-    console.log(categories);
     setCategories(categories);
   }
 
@@ -101,7 +106,18 @@ function ModifyProduct({ user, setProducts, setCategories }) {
                 setName(e.target.value);
               }}
             />
-            <TextField
+
+            <CreatableSelect
+              isClearable
+              options={options}
+              // styles={colourStyles}
+              className="w-full"
+              onChange={(e) => {
+                setChange(true);
+                setCategory(e.value);
+              }}
+            />
+            {/* <TextField
               id="outlined-basic"
               label="Category *"
               variant="outlined"
@@ -111,7 +127,7 @@ function ModifyProduct({ user, setProducts, setCategories }) {
                 setCategory(e.target.value);
               }}
               fullWidth
-            />
+            /> */}
 
             <TextField
               id="outlined-basic"

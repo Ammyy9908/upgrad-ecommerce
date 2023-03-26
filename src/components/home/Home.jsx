@@ -9,13 +9,13 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import Navbar from "../components/Navbar";
-import ProductCard from "../components/ProductCard";
-import Tab from "../components/Tab";
+import Navbar from "../Navbar";
+import ProductCard from "../ProductCard";
+import Tab from "../Tab";
 import AddIcon from "@mui/icons-material/Add";
-import useAdmin from "../hooks/useAdmin";
-import { setProducts } from "../redux/actions";
-import getProducts from "../utils/getProducts";
+import useAdmin from "../../hooks/useAdmin";
+import { setProducts } from "../../redux/actions";
+import getProducts from "../../utils/getProducts";
 import { useHistory } from "react-router-dom";
 function Home({ user, products, filteredProducts, setProducts }) {
   const [filter, setFilter] = useState("default");
@@ -46,7 +46,6 @@ function Home({ user, products, filteredProducts, setProducts }) {
       tempProducts.sort((a, b) => (a.price < b.price ? 1 : -1));
       setProducts(tempProducts);
     } else if (e.target.value === "new") {
-      console.log("Handling Newest Products");
       newProducts();
     } else {
       defaultProducts();
@@ -85,7 +84,7 @@ function Home({ user, products, filteredProducts, setProducts }) {
             {filteredProducts.length > 0
               ? filteredProducts.map((product, index) => {
                   return (
-                    <Grid item xs={12} md={6} lg={4}>
+                    <Grid item xs={12} md={6} lg={4} key={index}>
                       <ProductCard
                         product={product}
                         setAdminError={setAdminError}
@@ -95,7 +94,7 @@ function Home({ user, products, filteredProducts, setProducts }) {
                 })
               : products.map((product, index) => {
                   return (
-                    <Grid item xs={12} md={6} lg={4}>
+                    <Grid item xs={12} md={6} lg={4} key={index}>
                       <ProductCard
                         product={product}
                         setAdminError={setAdminError}

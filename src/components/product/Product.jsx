@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { setCart } from "../redux/actions";
-import getProduct from "../utils/getProduct";
+import Navbar from "../Navbar";
+import { setCart } from "../../redux/actions";
+import getProduct from "../../utils/getProduct";
 function Product({ product_id, setCart }) {
   const [product, setProduct] = useState(false);
   const [count, setCount] = useState(0);
@@ -13,13 +13,11 @@ function Product({ product_id, setCart }) {
   useEffect(() => {
     async function fetchProduct() {
       const pr = await getProduct(product_id);
-      console.log(pr);
+
       setProduct(pr);
     }
     fetchProduct();
   }, []);
-
-  console.log(product);
   return (
     <div>
       <Navbar />

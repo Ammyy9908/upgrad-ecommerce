@@ -2,15 +2,14 @@ import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { setCategories, setProducts } from "../redux/actions";
-import getCategories from "../utils/getCategories";
-import getProduct from "../utils/getProduct";
-import getProducts from "../utils/getProducts";
-import modifyProduct from "../utils/modifyProduct";
+import Navbar from "../Navbar";
+import { setCategories, setProducts } from "../../redux/actions";
+import getCategories from "../../utils/getCategories";
+import getProduct from "../../utils/getProduct";
+import getProducts from "../../utils/getProducts";
+import modifyProduct from "../../utils/modifyProduct";
 
 function ModifyProduct({ product_id, user, setProducts, setCategories }) {
-  console.log("Product Id", product_id);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [manufacture, setManufacture] = useState("");
@@ -30,9 +29,7 @@ function ModifyProduct({ product_id, user, setProducts, setCategories }) {
   useEffect(() => {
     async function fetchProduct() {
       const pr = await getProduct(product_id);
-      console.log(pr);
       setName(pr.name);
-
       setCategory(pr.category);
       setManufacture(pr.manufacturer);
       setItemCount(pr.availableItems);
@@ -45,13 +42,11 @@ function ModifyProduct({ product_id, user, setProducts, setCategories }) {
 
   async function fetchProducts() {
     const productsList = await getProducts();
-    console.log(productsList);
     setProducts(productsList);
   }
 
   async function fetchCategories() {
     const categories = await getCategories();
-    console.log(categories);
     setCategories(categories);
   }
 

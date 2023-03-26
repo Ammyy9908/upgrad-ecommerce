@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Auth from "./Pages/Auth";
+import Auth from "./components/auth/Auth";
 import { connect } from "react-redux";
 import {
   setAddresses,
@@ -9,62 +9,58 @@ import {
   setProducts,
   setUser,
 } from "./redux/actions";
-import Home from "./Pages/Home";
+import Home from "./components/home/Home";
 import GetUsers from "./utils/getUser";
 import DecodeToken from "./utils/decode_token";
-import NewProduct from "./Pages/NewProduct";
+import NewProduct from "./components/newProduct/NewProduct";
 import getCategories from "./utils/getCategories";
 import getProducts from "./utils/getProducts";
 import Logout from "./Pages/Logout";
-import ModifyProduct from "./Pages/ModifyProduct";
-import Product from "./Pages/Product";
-import PlaceOrder from "./Pages/PlaceOrder";
+import ModifyProduct from "./components/modifyProduct/ModifyProduct";
+import Product from "./components/product/Product";
+import PlaceOrder from "./components/placeOrder/PlaceOrder";
 import getAddress from "./utils/getAddresses";
-import axios from "axios";
+import useAuth from "./hooks/useAuth";
 
 function App({ setUser, setCategories, setProducts, setAddresses }) {
+  const auth = useAuth();
   useEffect(() => {
     async function fetchUsers() {
       const usersList = await GetUsers();
-      console.log(usersList);
+
       const decodedToken = DecodeToken();
-      console.log(decodedToken);
 
       const users = usersList.filter((user) => user.email === decodedToken.sub);
-
-      console.log(users[0]);
       setUser(users[0]);
     }
 
     async function fetchCategories() {
       const categories = await getCategories();
-      console.log(categories);
       setCategories(categories);
     }
     async function fetchProducts() {
       const productsList = await getProducts();
-      console.log(productsList);
       setProducts(productsList);
     }
 
     async function fetAddress() {
       const ad = await getAddress();
-      console.log(ad);
       let formattedAddresses = ad.map((a) => {
         return {
           value: a,
           label: `${a.landmark}->${a.name},${a.city}`,
         };
       });
-
-      console.log(formattedAddresses);
       setAddresses(formattedAddresses);
     }
-    fetchUsers();
-    fetchCategories();
-    fetchProducts();
-    fetAddress();
-  }, []);
+
+    if (auth) {
+      fetchUsers();
+      fetchCategories();
+      fetchProducts();
+      fetAddress();
+    }
+  }, [auth]);
 
   return (
     <Router>

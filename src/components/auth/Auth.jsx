@@ -1,13 +1,19 @@
-import { Button, Snackbar, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../Navbar";
 import LockIcon from "@mui/icons-material/Lock";
-import EmailValidator from "../utils/emailValidator";
-import PhoneValidator from "../utils/phoneValidator";
-import CreateUser from "../utils/signup";
-import { useHistory } from "react-router-dom";
-import AuthenticateUser from "../utils/login";
-import Cookies from "js-cookies";
+import EmailValidator from "../../utils/emailValidator";
+import PhoneValidator from "../../utils/phoneValidator";
+import CreateUser from "../../utils/signup";
+import { Link } from "react-router-dom";
+import AuthenticateUser from "../../utils/login";
 
 function Auth({ type }) {
   const [validEmail, setValidEmail] = useState(true);
@@ -21,7 +27,8 @@ function Auth({ type }) {
   const [mobile, setMobile] = useState("");
   const [cpassword, setCpass] = useState("");
   const [message, setMessage] = useState("");
-  const history = useHistory();
+  const [admin, setAdmin] = useState(false);
+
   // handle login
 
   const handleLogin = async () => {
@@ -47,7 +54,7 @@ function Auth({ type }) {
 
   //handle signup
 
-  const handleSignup = async (role) => {
+  const handleSignup = async () => {
     if (!EmailValidator(email)) {
       setValidEmail(false);
       return;
@@ -71,14 +78,13 @@ function Auth({ type }) {
       lname: lname,
       mobile: mobile,
       password: password,
-      role: role,
+      role: !admin ? "user" : "admin",
     });
 
-    console.log(create_feedback);
     setDone(true);
     setMessage(create_feedback?.message);
 
-    window.location.href = "/auth/login";
+    //window.location.href = "/auth/login";
   };
 
   const handleClose = () => {
@@ -134,6 +140,9 @@ function Auth({ type }) {
                   Log In
                 </Button>
               </div>
+              <Link to="/auth/signup" className="text-indigo-700 underline">
+                Don't have an account? Sign Up
+              </Link>
             </form>
           ) : (
             <form className="flex flex-col items-start gap-3 w-[375px]">
@@ -200,6 +209,20 @@ function Auth({ type }) {
                   setMobile(e.target.value);
                 }}
               />
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      defaultChecked
+                      onChange={() => {
+                        setAdmin(!admin);
+                      }}
+                      checked={admin ? true : false}
+                    />
+                  }
+                  label="Are you admin?"
+                />
+              </FormGroup>
               <div className="w-full flex items-center flex-col">
                 <Button
                   variant="contained"
@@ -210,17 +233,13 @@ function Auth({ type }) {
                 >
                   User Sign Up
                 </Button>
-                <p>Or</p>
 
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => {
-                    handleSignup("admin");
-                  }}
+                <Link
+                  to="/auth/login"
+                  className="mt-3 text-indigo-700 underline"
                 >
-                  Admin Sign Up
-                </Button>
+                  Alreadu have an account? Sign Up
+                </Link>
               </div>
             </form>
           )}

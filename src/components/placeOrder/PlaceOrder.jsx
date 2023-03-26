@@ -2,13 +2,13 @@ import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
 import Select from "react-select";
-import Navbar from "../components/Navbar";
-import HorizontalStepper from "../components/Stepper";
-import { addAddress, setOrder } from "../redux/actions";
-import sendAddress from "../utils/addAddress";
+import Navbar from "../Navbar";
+import HorizontalStepper from "../Stepper";
+import { addAddress, setOrder } from "../../redux/actions";
+import sendAddress from "../../utils/addAddress";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import sendOrder from "../utils/addOrder";
+import sendOrder from "../../utils/addOrder";
 import { useHistory } from "react-router-dom";
 
 function PlaceOrder({ addAddress, setOrder }) {
@@ -44,8 +44,6 @@ function PlaceOrder({ addAddress, setOrder }) {
       address: order?.address?.id,
     });
     let added = false;
-
-    console.log("ORDER PLACED", orderPlaced);
 
     if (orderPlaced === 500 || orderPlaced === 401) {
       toast.error("error in placing order");
@@ -146,8 +144,6 @@ function PlaceOrder({ addAddress, setOrder }) {
       zip,
       uid: user ? user?.id : "1234",
     });
-
-    console.log("SENTED", sented);
     if (sented === 400 || sented === 500 || sented === 401) {
       handleAddrssError();
       clearForm();

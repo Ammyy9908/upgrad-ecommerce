@@ -15,3 +15,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#react-select-2-listbox {
+  z-index: 2;
+  background-color: #fff !important;
+}

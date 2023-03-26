@@ -13,7 +13,6 @@ import useAuth from "../hooks/useAuth";
 
 export default function ProductCard({ product, setAdminError }) {
   const admin = useAdmin();
-  console.log("Admin in Product Card", admin);
   const auth = useAuth();
   const history = useHistory();
   const [open, setOpen] = useState(false);
